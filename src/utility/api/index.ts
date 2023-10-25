@@ -5,6 +5,7 @@ import { AlbumRecomendType } from "./albums_recomend_type";
 import { AlbumListType } from "./albums_list_type";
 import { ArtistType } from "./artist_type";
 import { TrackListByIdType } from "./track_list";
+import { ListTrackType } from "./list_track_type";
 
 interface GetAuthTokenReturn {
   "access_token": string,
@@ -60,6 +61,17 @@ export const getAlbumRecomend = (): Promise<AlbumRecomendType> => {
 export const getAlbumsById = (id: string): Promise<AlbumListType> => {
   return new Promise((resolve, reject) => {
     axiosClient.get(`albums/${id}`).then(response => {
+      resolve(response.data);
+    }).catch(error => {
+      console.log(error)
+      catchHelper(reject, error)
+    })
+  })
+}
+
+export const getTrackByAlbumId = (id: string): Promise<ListTrackType> => {
+  return new Promise((resolve, reject) => {
+    axiosClient.get(`albums/${id}/tracks?offset=0&limit=50`).then(response => {
       resolve(response.data);
     }).catch(error => {
       console.log(error)

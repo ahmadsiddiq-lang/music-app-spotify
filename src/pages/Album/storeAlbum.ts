@@ -1,6 +1,6 @@
 
 
-import { Item } from '@/utility/api/albums_list_type'
+import { AlbumListType, Item } from '@/utility/api/albums_list_type'
 import { create } from 'zustand'
 
 const defailtData: Item = {
@@ -38,4 +38,11 @@ export const useTrackStore = create<TrackStore>((set) => ({
   setToggle: (toggle) => set(() => ({ toggle })),
   set: (data) => set(() => ({ data, toggle: true })),
   reset: () => set(() => ({ data: defailtData, toggle: false })),
+}))
+
+
+export const useAlbumStore = create<Store<AlbumListType | undefined>>((set) => ({
+  data: undefined,
+  set: (data) => set(() => ({ data })),
+  reset: () => set(() => ({ data: undefined })),
 }))

@@ -6,7 +6,8 @@ export const usePlaying = () => {
   const track = useRef(new Audio(url))
   const [statusPlay, setStatus] = useState(!track.current.paused)
 
-  const play = useCallback(() => {
+  const play = useCallback((time?: number) => {
+    if (time) track.current.currentTime = time
     track.current.volume = volume
     track.current.play()
     setStatus(true)
@@ -44,21 +45,19 @@ export const usePlaying = () => {
       track.current.src = newUrl
       track.current.volume = volume
       track.current.autoplay = true
-      setStatus(true)
+      setStatus(!track.current.paused)
       setUrl(newUrl);
     } else {
       stop()
       track.current.src = newUrl
       track.current.volume = volume
       track.current.autoplay = true
-      setStatus(true)
+      setStatus(!track.current.paused)
       setUrl(newUrl);
     }
   }
 
-  const duration = () => {
-    return track.current.duration
-  }
+  const currentTrack: HTMLAudioElement = track.current
 
   return {
     play,
@@ -67,10 +66,10 @@ export const usePlaying = () => {
     setPlay,
     reset,
     setVolume,
-    duration,
     playing,
     statusPlay,
     url,
-    setUrl
+    setUrl,
+    currentTrack
   }
 }

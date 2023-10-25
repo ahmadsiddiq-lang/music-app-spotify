@@ -3,15 +3,17 @@ import { Box, Heading, Image, Text } from "@chakra-ui/react"
 import dayjs from "dayjs"
 import { IoPauseCircleOutline, IoPlaySharp } from "react-icons/io5"
 import { When } from "react-if"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useFetchAlbumsById } from "./query"
-import { useTrackStore } from "./storeAlbum"
+import { useAlbumStore, useTrackStore } from "./storeAlbum"
 import { usePlaying } from "@/utility/hooks/usePlaying"
 
 const Album = () => {
   const { id } = useParams()
+  const navigate = useNavigate()
   const { data: dataPlaylist, status: statusFetchPlaylist } = useFetchAlbumsById(id ?? '')
   const [setData, reset] = useTrackStore((state) => [state.set, state.reset])
+  const [setDataAlbum] = useAlbumStore((state) => [state.set])
   const { url, setUrl, statusPlay } = usePlaying()
 
 
@@ -34,13 +36,14 @@ const Album = () => {
               return (
                 <Box
                   onClick={() => {
-                    reset()
-                    setData(item)
-                    setUrl(item.preview_url)
+                    // reset()
+                    // setUrl(item.preview_url)
+                    // setData(item)
+                    setDataAlbum(dataPlaylist)
+                    navigate(`/playing/${id}&${item.id}`)
                   }}
                   key={item.id} py={2} px={5} className="flex justify-between items-center">
                   <Text>{item.name}</Text>
-                  {console.log(statusPlay)}
                   {
                     item.preview_url == url && statusPlay ? <IoPauseCircleOutline color={'#474747'} /> : <IoPlaySharp color={'#c7c7c7'} />
                   }
